@@ -1,13 +1,47 @@
 import re
+import os
 from collections import Counter
 
-# ---------- A) Analizador de Email ----------
+ejemplos = {
+    "emails.txt": [
+        "juan123@gmail.com",
+        "_marta@outlook.com",
+        "pepe@dominio.org",
+        "luis.lopez@yahoo.ar",
+        "ana-92@live.net"
+    ],
+    "urls.txt": [
+        "https://www.google.com",
+        "http://facebook.com",
+        "www.youtube.com",
+        "twitter.com/",
+        "https://invalido.com.pe"
+    ],
+    "ips.txt": [
+        "192.168.1.1",
+        "256.100.50.0",
+        "10.0.0.256",
+        "8.8.8.8",
+        "127.0.0.1"
+    ],
+    "texto.txt": [
+        "Hola universidad de mendoza, carrera ingenieria en informatica automatas y gramaticas"
+    ]
+}
+
+
+def crear_archivos():
+    for nombre, lineas in ejemplos.items():
+        if not os.path.exists(nombre):
+            with open(nombre, 'w') as f:
+                f.write('\n'.join(lineas))
+            print(f"✅ Archivo creado: {nombre}")
+
+
 def analizar_emails(archivo):
     print("📧 Analizando Emails:")
-    # Definimos 5 dominios y 5 países válidos
     dominios = ['gmail', 'outlook', 'yahoo', 'hotmail', 'live']
     paises = ['com', 'net', 'org', 'edu', 'ar']
-    # Expresión regular
     regex = re.compile(
         r'^[a-zA-Z][\w\.-]*@(' + '|'.join(dominios) + r')\.(' + '|'.join(paises) + r')$'
     )
@@ -20,10 +54,9 @@ def analizar_emails(archivo):
                 print(f"❌ Inválido: {email}")
     print()
 
-# ---------- B) Analizador de URLs ----------
+
 def analizar_urls(archivo):
     print("🌐 Analizando URLs:")
-    # Expresión regular de URL simplificada según las reglas
     regex = re.compile(
         r'^(https?://)?(www\.)?[\w\-]+\.(com)(/|\?.*)?$'
     )
@@ -36,17 +69,14 @@ def analizar_urls(archivo):
                 print(f"❌ Inválida: {url}")
     print()
 
-# ---------- C) Analizador de IPs ----------
+
 def analizar_ips(archivo):
     print("🔢 Analizando Direcciones IP:")
     def ip_valida(ip):
         partes = ip.split('.')
-        if len(partes) != 4:
-            return False
-        for parte in partes:
-            if not parte.isdigit() or not (0 <= int(parte) <= 255):
-                return False
-        return True
+        return len(partes) == 4 and all(
+            parte.isdigit() and 0 <= int(parte) <= 255 for parte in partes
+        )
     with open(archivo, 'r') as f:
         for linea in f:
             ip = linea.strip()
@@ -56,7 +86,7 @@ def analizar_ips(archivo):
                 print(f"❌ Inválida: {ip}")
     print()
 
-# ---------- D) Contador de Palabras ----------
+
 def contar_palabras(archivo):
     print("📊 Conteo de Palabras:")
     with open(archivo, 'r') as f:
@@ -68,8 +98,9 @@ def contar_palabras(archivo):
         print(f"Palabra más repetida: '{palabra_mas_comun}' aparece {cantidad} veces.")
     print()
 
-# ---------- Ejecutar todos ----------
+
 def main():
+    crear_archivos()
     analizar_emails("emails.txt")
     analizar_urls("urls.txt")
     analizar_ips("ips.txt")
@@ -77,3 +108,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

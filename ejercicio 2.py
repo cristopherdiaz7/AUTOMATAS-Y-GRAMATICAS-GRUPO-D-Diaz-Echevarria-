@@ -6,7 +6,7 @@ def reconocer_cadena(cadena):
             if caracter.isalpha():
                 estado = 'entrada'
             else:
-                return False  # No empieza con letra
+                return False
         elif estado == 'entrada':
             if caracter.isalnum():
                 estado = 'entrada'
@@ -14,12 +14,12 @@ def reconocer_cadena(cadena):
                 estado = 'final'
                 break
         else:
-            return False  # Estado inválido
+            return False
 
-    # Si terminó en un estado válido
-    return estado == 'entrada'  # El final aceptado es cuando está aún en "entrada"
 
-# Ejemplos de prueba
-print(reconocer_cadena("abc123"))  # True
-print(reconocer_cadena("123abc"))  # False
-print(reconocer_cadena("abc$"))    # False
+    return estado == 'entrada'
+
+# Ejemplos
+print(reconocer_cadena("abc123"))
+print(reconocer_cadena("123abc"))
+print(reconocer_cadena("abc$"))
