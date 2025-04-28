@@ -1,25 +1,22 @@
-def reconocer_cadena(cadena):
-    estado = 'inicio'
+def solve(expression: str) -> int:
+    tokens = expression.split()
+    stack = []
+    i = 0
+    while i < len(tokens):
+        if tokens[i] == '*':
 
-    for caracter in cadena:
-        if estado == 'inicio':
-            if caracter.isalpha():
-                estado = 'entrada'
-            else:
-                return False
-        elif estado == 'entrada':
-            if caracter.isalnum():
-                estado = 'entrada'
-            else:
-                estado = 'final'
-                break
+            prev = stack.pop()
+            result = prev * int(tokens[i + 1])
+            stack.append(result)
+            i += 2
+        elif tokens[i] == '+':
+
+            i += 1
         else:
-            return False
+            stack.append(int(tokens[i]))
+            i += 1
+    return sum(stack)
 
 
-    return estado == 'entrada'
-
-# Ejemplos
-print(reconocer_cadena("abc123"))
-print(reconocer_cadena("123abc"))
-print(reconocer_cadena("abc$"))
+print(solve("2 + 7 * 2 + 1"))
+print(solve("2 * 2 * 2 + 32 * 2")) 
