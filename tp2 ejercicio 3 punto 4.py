@@ -1,23 +1,21 @@
-estado_inicial = 'A'
-estados_finales = {'A', 'B'}
-
-transiciones = {
-    'A': {'a': 'B', 'b': 'B'},
-    'B': {'a': 'B', 'b': 'B'}
+AFD = {
+    'A': {'a': 'A', 'b': 'A'}
 }
 
-def procesar_cadena(cadena):
+estado_inicial = 'A'
+estado_final = {'A'}
+
+def acepta_afd(cadena):
     estado_actual = estado_inicial
-
     for simbolo in cadena:
-        if simbolo in transiciones[estado_actual]:
-            estado_actual = transiciones[estado_actual][simbolo]
-        else:
+        if simbolo not in AFD[estado_actual]:
             return False
+        estado_actual = AFD[estado_actual][simbolo]
+    return estado_actual in estado_final
 
-    return estado_actual in estados_finales
+print(acepta_afd(""))
+print(acepta_afd("a"))
+print(acepta_afd("bbba"))
+print(acepta_afd("babab"))
+print(acepta_afd("c"))
 
-cadenas = ["", "a", "b", "ab", "ba", "abba", "bab", "bbb", "aaab", "aaaabb", "abab", "baba", "baabba", "bbbaaa"]
-for cadena in cadenas:
-    resultado = procesar_cadena(cadena)
-    print(f"Cadena '{cadena}': {'ACCEPTADA' if resultado else 'RECHAZADA'}")
